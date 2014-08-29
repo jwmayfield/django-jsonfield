@@ -23,6 +23,15 @@ from .subclassing import SubfieldBase
 
 class JSONFormFieldBase(object):
 
+    def __init__(self, *args, **kwargs):
+        self.dump_kwargs = kwargs.pop('dump_kwargs', {
+            'cls': DjangoJSONEncoder,
+            'separators': (',', ':')
+        })
+        self.load_kwargs = kwargs.pop('load_kwargs', {})
+
+        super(JSONFormFieldBase, self).__init__(*args, **kwargs)
+
     def to_python(self, value):
         if isinstance(value, six.string_types):
             try:
